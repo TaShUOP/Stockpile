@@ -20,6 +20,8 @@ export class Player {
   hiddenForecastCard?: Forecast;
   biddingMeeplePlaced: boolean;
   cardsInHand: Card[]; // Used during supply phase
+  hasPlacedFaceUp: boolean;
+  hasPlacedFaceDown: boolean;
 
   constructor(id: string, name: string) {
     this.id = id;
@@ -35,6 +37,8 @@ export class Player {
     };
     this.biddingMeeplePlaced = false;
     this.cardsInHand = [];
+    this.hasPlacedFaceUp = false;
+    this.hasPlacedFaceDown = false;
   }
 
   // Returns data safe to send to everyone

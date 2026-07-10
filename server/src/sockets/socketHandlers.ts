@@ -58,6 +58,39 @@ export function setupSocketHandlers(io: Server) {
       }
     });
 
+    socket.on('placeCard', (data: { roomId: string, cardId: string, stockpileIndex: number, faceDown: boolean }) => {
+      const room = rooms[data.roomId];
+      if (room) {
+        room.placeCard(socket.id, data.cardId, data.stockpileIndex, data.faceDown);
+        io.to(data.roomId).emit('roomUpdated', room.getPublicState());
+        room.players.forEach(p => {
+          io.to(p.id).emit('playerData', p.getPrivateData());
+        });
+      }
+    });
+
+    socket.on('placeBid', (data: { roomId: string, stockpileIndex: number, amount: number }) => {
+      const room = rooms[data.roomId];
+      if (room) {
+        room.placeBid(socket.id, data.stockpileIndex, data.amount);
+        io.to(data.roomId).emit('roomUpdated', room.getPublicState());
+        room.players.forEach(p => {
+          io.to(p.id).emit('playerData', p.getPrivateData());
+        });
+      }
+    });
+
+    socket.on('sellShares', (data: { roomId: string, company: string, amount: number }) => {
+      const room = rooms[data.roomId];
+      if (room) {
+        room.sellShares(socket.id, data.company, data.amount);
+        io.to(data.roomId).emit('roomUpdated', room.getPublicState());
+        room.players.forEach(p => {
+          io.to(p.id).emit('playerData', p.getPrivateData());
+        });
+      }
+    });
+
     socket.on('disconnect', () => {
       console.log(`User disconnected: ${socket.id}`);
       // Basic disconnect handling

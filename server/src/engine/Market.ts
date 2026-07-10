@@ -13,6 +13,37 @@ export class Market {
   }
 
   initializeDecks() {
+    this.resetRoundDecks();
+
+    const companies = [
+      'Megacorp Industries',
+      'Byteonics Inc.',
+      'AeroStar Dynamics',
+      'Global Pharma',
+      'Cosmic Energy',
+      'OmniBank'
+    ];
+
+    // Create Market Deck (stocks, fees, actions)
+    for (let c of companies) {
+      for (let i = 0; i < 8; i++) {
+        this.marketDeck.push({ id: `stock-${c}-${i}`, type: 'stock', company: c });
+      }
+    }
+    for (let i = 0; i < 5; i++) {
+      this.marketDeck.push({ id: `action-boom-${i}`, type: 'action', actionType: 'boom' });
+      this.marketDeck.push({ id: `action-bust-${i}`, type: 'action', actionType: 'bust' });
+    }
+    for (let i = 0; i < 8; i++) {
+      this.marketDeck.push({ id: `fee-${i}`, type: 'fee', value: -2000 });
+    }
+    this.shuffle(this.marketDeck);
+  }
+
+  resetRoundDecks() {
+    this.companyDeck = [];
+    this.forecastDeck = [];
+
     const companies = [
       'Megacorp Industries',
       'Byteonics Inc.',
@@ -39,21 +70,6 @@ export class Market {
       this.forecastDeck.push({ company: '', movement: f }); // Company is assigned during pairing
     }
     this.shuffle(this.forecastDeck);
-
-    // Create Market Deck (stocks, fees, actions)
-    for (let c of companies) {
-      for (let i = 0; i < 8; i++) {
-        this.marketDeck.push({ id: `stock-${c}-${i}`, type: 'stock', company: c });
-      }
-    }
-    for (let i = 0; i < 5; i++) {
-      this.marketDeck.push({ id: `action-boom-${i}`, type: 'action', actionType: 'boom' });
-      this.marketDeck.push({ id: `action-bust-${i}`, type: 'action', actionType: 'bust' });
-    }
-    for (let i = 0; i < 8; i++) {
-      this.marketDeck.push({ id: `fee-${i}`, type: 'fee', value: -2000 });
-    }
-    this.shuffle(this.marketDeck);
   }
 
   shuffle(array: any[]) {
