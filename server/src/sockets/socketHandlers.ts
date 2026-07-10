@@ -10,7 +10,7 @@ export function setupSocketHandlers(io: Server) {
     socket.on('createRoom', (data: { roomId: string, playerName: string }) => {
       const { roomId, playerName } = data;
       if (!rooms[roomId]) {
-        rooms[roomId] = new GameEngine(roomId);
+        rooms[roomId] = new GameEngine(roomId, socket.id);
         console.log(`Room ${roomId} created`);
       }
       
@@ -37,9 +37,24 @@ export function setupSocketHandlers(io: Server) {
 
     socket.on('startGame', (roomId: string) => {
       const room = rooms[roomId];
-      if (room && !room.hasStarted) {
+      if (room && !room.hasStarted && socket.id === room.hostId) {
         room.startGame();
         io.to(roomId).emit('roomUpdated', room.getPublicState());
+        // Also emit playerData to update starting hands
+        room.players.forEach(p => {
+          io.to(p.id).emit('playerData', p.getPrivateData());
+        });
+      }
+    });
+
+    socket.on('nextPhase', (roomId: string) => {
+      const room = rooms[roomId];
+      if (room && room.hasStarted && socket.id === room.hostId) {
+        room.nextPhase();
+        io.to(roomId).emit('roomUpdated', room.getPublicState());
+        room.players.forEach(p => {
+          io.to(p.id).emit('playerData', p.getPrivateData());
+        });
       }
     });
 

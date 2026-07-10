@@ -14,8 +14,11 @@ export class GameEngine {
   publicForecast: Forecast | null;
   stockpiles: { cards: Card[], bids: { playerId: string, amount: number }[] }[];
 
-  constructor(roomId: string) {
+  hostId: string;
+
+  constructor(roomId: string, hostId: string) {
     this.roomId = roomId;
+    this.hostId = hostId;
     this.players = [];
     this.hasStarted = false;
     this.round = 1;
@@ -102,6 +105,14 @@ export class GameEngine {
   }
 
   startSupplyPhase() {
+    // Deal 1 market card to each stockpile face-up
+    for (let s of this.stockpiles) {
+      const cards = this.market.drawMarketCards(1);
+      if (cards.length > 0) {
+        s.cards.push({ ...cards[0], faceDown: false } as any);
+      }
+    }
+    
     // Deal 2 market cards to each player
     for (let p of this.players) {
       p.cardsInHand = this.market.drawMarketCards(2);
@@ -131,6 +142,7 @@ export class GameEngine {
   getPublicState() {
     return {
       roomId: this.roomId,
+      hostId: this.hostId,
       hasStarted: this.hasStarted,
       round: this.round,
       maxRounds: this.maxRounds,
