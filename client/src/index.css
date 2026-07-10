@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --color-bg: #050505;
+  --color-text: #e0e0e0;
+  --color-primary: #39ff14; /* Neon Green */
+  --color-danger: #ff073a; /* Neon Red */
+  --color-panel: rgba(20, 20, 20, 0.8);
+  --color-border: #39ff14;
+  
+  --font-retro: 'VT323', monospace;
+  
+  --glow-primary: 0 0 10px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.3);
+  --glow-danger: 0 0 10px rgba(255, 7, 58, 0.5), 0 0 20px rgba(255, 7, 58, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-retro);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+  font-size: 1.2rem;
+  background-image: 
+    linear-gradient(rgba(0, 255, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 0, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* CRT Scanline Effect Overlay */
+body::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 999;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: var(--glow-primary);
+  margin-bottom: 1rem;
+}
+
+button {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-retro);
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.2);
+}
+
+button:hover {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  box-shadow: var(--glow-primary);
+}
+
+button:disabled {
+  border-color: #555;
+  color: #555;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+button:disabled:hover {
+  background: transparent;
+  color: #555;
+  box-shadow: none;
+}
+
+input {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  padding: 0.5rem;
+  font-family: var(--font-retro);
+  font-size: 1.2rem;
+  outline: none;
+}
+input:focus {
+  box-shadow: var(--glow-primary);
+}
+
+.panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.text-danger {
+  color: var(--color-danger);
+  text-shadow: var(--glow-danger);
+}
+.text-success {
+  color: var(--color-primary);
+  text-shadow: var(--glow-primary);
+}
